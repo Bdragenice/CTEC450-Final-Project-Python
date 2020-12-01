@@ -16,8 +16,7 @@ try:
     print("\nPrinting each laptop record")
     for row in records:
         print("Id = ", row[0], )
-        print("Name = ", row[1])
-        print("Temperature  = ", row[2], "\n")
+        print("Temperature  = ", row[1], "\n")
 
 except Error as e:
     print("Error reading data from MySQL table", e)

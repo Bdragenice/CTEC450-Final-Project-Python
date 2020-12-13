@@ -1,0 +1,14 @@
+[
+	{
+		"name": "Jared",
+		"COVID19": true
+	},
+	{
+		"name": "Edgar",
+		"COVID19": false
+	},
+	{
+		"name": "Stephanie",
+		"COVID19": true
+	}
+]

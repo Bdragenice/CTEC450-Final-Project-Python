@@ -1,0 +1,38 @@
+import pymysql, os, json
+
+# read JSON file which is in the next parent folder
+file = os.path.abspath('C:/Users/mohamm11/Desktop/record.json')
+file2 = open('C:\Users\mohamm11\Desktop\data.txt', 'r')
+json_data=open(file).read()
+json_obj = json.loads(json_data)
+
+
+# do validation and checks before insert
+def validate_string(val):
+   if val != None:
+        if type(val) is int:
+            #for x in val:
+            #   print(x)
+            return str(val).encode('utf-8')
+        else:
+            return val
+
+
+# connect to MySQL
+con = pymysql.connect(host = '127.0.0.1',user = 'root',passwd = 'PassRoot_2',db = 'userinfo')
+cursor = con.cursor()
+
+
+# parse json data to SQL insert
+for i, item in enumerate(json_obj):
+    name = validate_string(item.get("name", None))
+    COVID19 = validate_string(item.get("COVID19", None))
+    fileLine = file2.readline()
+    fileList = fileLine.split()
+    temp = float(fileList[0])
+    Date = fileList[1]+"-"+fileList[2]+"-"+fileList[3]+"-"+fileList[6]
+    Time = fileList[4]
+    cursor.execute("INSERT INTO temps (name, temp, Date, Time, COVID19) VALUES (%s, %s, %s, %s, %s)", (name, temp, Date, Time, COVID19))
+
+con.commit()
+con.close()

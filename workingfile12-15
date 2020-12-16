@@ -1,6 +1,5 @@
 import pymysql, os, json
 import datetime
-import json
 
 # read JSON file which is in the next parent folder
 file = os.path.abspath('C:/Users/mohamm11/Desktop/record.json')

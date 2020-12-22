@@ -1,0 +1,45 @@
+import pymysql, os, json
+import datetime
+try:
+    # read JSON file which is in the next parent folder
+    file = os.path.abspath('C:/Users/mohamm11/Desktop/record.json')
+    file2 = open('C:\Users\mohamm11\Desktop\data.txt', 'r')
+    json_data=open(file).read()
+    json_obj = json.loads(json_data)
+
+
+    # do validation and checks before insert
+    def validate_string(val):
+       if val != None:
+            if type(val) is int:
+                #for x in val:
+                #   print(x)
+                return str(val).encode('utf-8')
+            else:
+                return val
+
+
+    # connect to MySQL
+    con = pymysql.connect(host = 'daabase-1.cqcqqd3q6sa4.us-east-2.rds.amazonaws.com',user = 'admin',passwd = 'Aceboom!',db = 'Covid_Session')
+    cursor = con.cursor()
+
+
+    # parse json data to SQL insert
+    for i, item in enumerate(json_obj):
+        name = validate_string(item.get("name", None))
+        COVID19 = validate_string(item.get("COVID19", None))
+        fileLine = file2.readline()
+        fileList = fileLine.split()
+        temp = float(fileList[0])
+        dictionary ={"temp": temp}
+        with open("C:\Users\mohamm11\Desktop\temp.json", "w") as outfile:
+            json.dump(dictionary, outfile)
+        date_time_str = fileList[1]+" "+fileList[2]+" "+fileList[3]+" "+fileList[6]+" "+fileList[4]
+        date_time_obj = datetime.datetime.strptime(date_time_str, '%a %b %d %Y %I:%M:%S')
+        Time = fileList[4]
+        cursor.execute("INSERT INTO SESSION_TEST (Name, Temperature, Session_Date, Session_Time, COVID19) VALUES (%s, %s, %s, %s, %s)", (name, temp, date_time_obj, Time, COVID19))
+
+    con.commit()
+    con.close()
+except:
+    print("There was a problem with connecting to the database or reading from the files")
